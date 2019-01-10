@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shiep.classroom.core.shiepcrmcore.classroomorder.dao.ClassroomOderDao">
+    <resultMap id="BaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="classroom_code" jdbcType="VARCHAR" property="classroomCode"/>
+        <result column="classroom_name" jdbcType="VARCHAR" property="classroomName"/>
+        <result column="is_computer" jdbcType="VARCHAR" property="isComputer"/>
+        <result column="chairs" jdbcType="INTEGER" property="chairs"/>
+        <result column="desks" jdbcType="INTEGER" property="desks"/>
+        <result column="actual_chairs" jdbcType="INTEGER" property="actualChairs"/>
+        <result column="actual_desks" jdbcType="INTEGER" property="actualDesks"/>
+        <result column="projector_count" jdbcType="INTEGER" property="projectorCount"/>
+        <result column="is_projector" jdbcType="VARCHAR" property="isProjector"/>
+        <result column="computer_count" jdbcType="INTEGER" property="computerCount"/>
+        <result column="is_clear" jdbcType="VARCHAR" property="isClear"/>
+        <result column="is_prohibited" jdbcType="VARCHAR" property="isProhibited"/>
+        <result column="building_code" jdbcType="VARCHAR" property="buildingCode"/>
+        <result column="floor" jdbcType="VARCHAR" property="floor"/>
+    </resultMap>
+
+    <select id="getAllClassroomList" resultMap="BaseResultMap">
+        SELECT
+        id,
+        classroom_code,
+        classroom_name,
+        chairs,
+        desks,
+        actual_chairs,
+        actual_desks,
+        projector_count,
+        is_projector,
+        is_computer,
+        computer_count,
+        is_clear,
+        is_prohibited,
+        building_code,
+        floor
+        FROM shiep_classroom_info
+        WHERE
+        is_deleted IN ('n','N')
+    </select>
+
+
+
+</mapper>
