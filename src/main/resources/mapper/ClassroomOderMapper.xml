@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.shiep.classroom.core.shiepcrmcore.classroomorder.dao.ClassroomOderDao">
-    <resultMap id="BaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO">
+    <resultMap id="ClassrommBaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO">
         <!--
           WARNING - @mbg.generated
         -->
@@ -20,30 +20,59 @@
         <result column="is_prohibited" jdbcType="VARCHAR" property="isProhibited"/>
         <result column="building_code" jdbcType="VARCHAR" property="buildingCode"/>
         <result column="floor" jdbcType="VARCHAR" property="floor"/>
+        <result column="building_name" jdbcType="VARCHAR" property="buildingName"/>
     </resultMap>
 
-    <select id="getAllClassroomList" resultMap="BaseResultMap">
+    <resultMap id="BuildingBaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="second_name" jdbcType="VARCHAR" property="secondName"/>
+        <result column="building_code" jdbcType="VARCHAR" property="buildingCode"/>
+        <result column="floors" jdbcType="VARCHAR" property="floors"/>
+        <result column="building_name" jdbcType="VARCHAR" property="buildingName"/>
+        <result column="tab_id" jdbcType="VARCHAR" property="tabId"/>
+    </resultMap>
+
+    <select id="getAllClassroomList" resultMap="ClassrommBaseResultMap">
         SELECT
-        id,
-        classroom_code,
-        classroom_name,
-        chairs,
-        desks,
-        actual_chairs,
-        actual_desks,
-        projector_count,
-        is_projector,
-        is_computer,
-        computer_count,
-        is_clear,
-        is_prohibited,
-        building_code,
-        floor
-        FROM shiep_classroom_info
+        shiep_classroom_info.id,
+        shiep_classroom_info.classroom_code,
+        shiep_classroom_info.classroom_name,
+        shiep_classroom_info.chairs,
+        shiep_classroom_info.desks,
+        shiep_classroom_info.actual_chairs,
+        shiep_classroom_info.actual_desks,
+        shiep_classroom_info.projector_count,
+        shiep_classroom_info.is_projector,
+        shiep_classroom_info.is_computer,
+        shiep_classroom_info.computer_count,
+        shiep_classroom_info.is_clear,
+        shiep_classroom_info.is_prohibited,
+        shiep_classroom_info.building_code,
+        shiep_classroom_info.floor,
+        shiep_building_info.building_name
+        FROM
+        shiep_classroom_info LEFT JOIN shiep_building_info ON shiep_classroom_info.building_code = shiep_building_info.building_code
         WHERE
-        is_deleted IN ('n','N')
+        shiep_classroom_info.is_deleted IN ('n','N')
+        AND
+        shiep_building_info.is_deleted IN ('n','N')
     </select>
 
+    <select id="getAllBuildingList" resultMap="BuildingBaseResultMap">
+        SELECT
+        id,
+        building_name,
+        building_code,
+        floors,
+        second_name,
+        tab_id
+        FROM shiep_building_info
+        where
+        is_deleted IN ('n','N')
+    </select>
 
 
 </mapper>

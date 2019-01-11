@@ -13,4 +13,9 @@ import lombok.Data;
 @Data
 public class ShiepClassroomInfoDTO extends ShiepClassroomInfoVo {
 
+    /**
+     * 大楼名字
+     */
+    private String buildingName;
+
 }

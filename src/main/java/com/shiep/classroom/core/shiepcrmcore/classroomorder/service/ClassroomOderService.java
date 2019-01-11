@@ -2,6 +2,9 @@ package com.shiep.classroom.core.shiepcrmcore.classroomorder.service;
 
 import com.github.pagehelper.Page;
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO;
+import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo;
+
+import java.util.List;
 
 /**
  * @program: shiep-crm-core
@@ -16,5 +19,11 @@ public interface ClassroomOderService {
      * @return
      */
     Page getAllClassroomList(ShiepClassroomInfoDTO shiepClassroomInfoDTO);
+
+    /**
+     * 获取所有楼幢信息
+     * @return
+     */
+    List<ShiepBuildingInfoVo> getAllBuildingList();
 
 }

@@ -1,6 +1,7 @@
 package com.shiep.classroom.core.shiepcrmcore.classroomorder.dao;
 
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO;
+import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -21,5 +22,11 @@ public interface ClassroomOderDao {
      * @return
      */
     List<ShiepClassroomInfoDTO> getAllClassroomList();
+
+    /**
+     * 获取所有楼幢信息
+     * @return
+     */
+    List<ShiepBuildingInfoVo> getAllBuildingList();
 
 }

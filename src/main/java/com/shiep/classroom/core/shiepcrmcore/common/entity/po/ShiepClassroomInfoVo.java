@@ -266,7 +266,6 @@ public class ShiepClassroomInfoVo extends PageInfoDTO {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, classroomCode, classroomName, chairs, desks, actualChairs, actualDesks, projectorCount, isProjector, isComputer, computerCount, isClear, modifior, creator, createdTime, modifiedTime, isDeleted, isProhibited, buildingCode, floor);
     }
 }

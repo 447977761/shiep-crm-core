@@ -7,6 +7,7 @@ import com.shiep.classroom.core.shiepcrmcore.classroomorder.dao.ClassroomOderDao
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO;
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.service.ClassroomOderService;
 import com.shiep.classroom.core.shiepcrmcore.common.ShmCodeEnum;
+import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,10 @@ public class ClassroomOderServiceImpl implements ClassroomOderService {
         }
         List<ShiepClassroomInfoDTO> shiepClassroomInfoDTOS =  classroomOderDao.getAllClassroomList();
         return (Page) shiepClassroomInfoDTOS;
+    }
+
+    @Override
+    public List<ShiepBuildingInfoVo> getAllBuildingList() {
+        return classroomOderDao.getAllBuildingList();
     }
 }
