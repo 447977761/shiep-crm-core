@@ -18,4 +18,9 @@ public class ShiepClassroomInfoDTO extends ShiepClassroomInfoVo {
      */
     private String buildingName;
 
+    /**
+     * 大楼tabId
+     */
+    private String buildingTabId;
+
 }

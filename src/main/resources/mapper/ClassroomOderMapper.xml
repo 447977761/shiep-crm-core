@@ -32,7 +32,6 @@
         <result column="building_code" jdbcType="VARCHAR" property="buildingCode"/>
         <result column="floors" jdbcType="VARCHAR" property="floors"/>
         <result column="building_name" jdbcType="VARCHAR" property="buildingName"/>
-        <result column="tab_id" jdbcType="VARCHAR" property="tabId"/>
     </resultMap>
 
     <select id="getAllClassroomList" resultMap="ClassrommBaseResultMap">
@@ -59,6 +58,22 @@
         shiep_classroom_info.is_deleted IN ('n','N')
         AND
         shiep_building_info.is_deleted IN ('n','N')
+        <if test=" buildingCode != '' and buildingCode != null ">
+            AND  shiep_classroom_info.building_code = #{buildingCode}
+        </if>
+        <if test=" floor != '' and floor != null ">
+            AND  shiep_classroom_info.floor = #{floor}
+        </if>
+        <if test=" isComputer != '' and isComputer != null ">
+            AND  shiep_classroom_info.is_projector = #{isComputer}
+        </if>
+        <if test=" isProjector != '' and isProjector != null ">
+            AND  shiep_classroom_info.is_computer = #{isProjector}
+        </if>
+        <if test=" classroomName != '' and classroomName != null ">
+            <bind name="classroomName" value="'%' + classroomName + '%'" />
+            AND  shiep_classroom_info.classroom_name LIKE #{classroomName}
+        </if>
     </select>
 
     <select id="getAllBuildingList" resultMap="BuildingBaseResultMap">
@@ -67,8 +82,7 @@
         building_name,
         building_code,
         floors,
-        second_name,
-        tab_id
+        second_name
         FROM shiep_building_info
         where
         is_deleted IN ('n','N')

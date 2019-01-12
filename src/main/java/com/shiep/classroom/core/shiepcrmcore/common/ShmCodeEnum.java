@@ -21,7 +21,15 @@ public enum ShmCodeEnum{
     /**
      * 分页失败，pageNum、pageSize不能为空
      */
-    PAGE_HELPER_901("901","分页失败，pageNum、pageSize不能为空");
+    PAGE_HELPER_901("901","分页失败，pageNum、pageSize不能为空"),
+
+    /**
+     * 全部页卡项
+     */
+    TOTAL_BUILDING_CLASSROOM("tab-0","全部教室");
+
+
+
 
     private String code;
     private String desc;
