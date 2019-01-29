@@ -21,6 +21,14 @@
         <result column="building_code" jdbcType="VARCHAR" property="buildingCode"/>
         <result column="floor" jdbcType="VARCHAR" property="floor"/>
         <result column="building_name" jdbcType="VARCHAR" property="buildingName"/>
+        <result column="type_name" jdbcType="VARCHAR" property="roomTypeName"/>
+        <result column="type_code" jdbcType="VARCHAR" property="roomTypeCode"/>
+        <result column="master_username" jdbcType="VARCHAR" property="masterUsername"/>
+        <result column="manager_username" jdbcType="VARCHAR" property="managerUsername"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="order_start_date" jdbcType="TIMESTAMP" property="orderStartDate"/>
+        <result column="order_end_date" jdbcType="TIMESTAMP" property="orderEndDate"/>
     </resultMap>
 
     <resultMap id="BuildingBaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo">
@@ -32,6 +40,30 @@
         <result column="building_code" jdbcType="VARCHAR" property="buildingCode"/>
         <result column="floors" jdbcType="VARCHAR" property="floors"/>
         <result column="building_name" jdbcType="VARCHAR" property="buildingName"/>
+    </resultMap>
+
+    <resultMap id="BookingInfoBaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomBookingDTO">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="classroom_code" jdbcType="VARCHAR" property="classroomCode"/>
+        <result column="order_start_date" jdbcType="VARCHAR" property="orderStartDate"/>
+        <result column="order_end_date" jdbcType="VARCHAR" property="orderEndDate"/>
+        <result column="manager_username" jdbcType="VARCHAR" property="managerUsername"/>
+        <result column="book_username" jdbcType="VARCHAR" property="bookUsername"/>
+        <result column="is_clear" jdbcType="VARCHAR" property="isClear"/>
+        <result column="book_no" jdbcType="VARCHAR" property="bookNo"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+
+    <resultMap id="ClassroomTypeBaseResultMap" type="com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepClassroomTypeInfoVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode"/>
     </resultMap>
 
     <select id="getAllClassroomList" resultMap="ClassrommBaseResultMap">
@@ -51,9 +83,34 @@
         shiep_classroom_info.is_prohibited,
         shiep_classroom_info.building_code,
         shiep_classroom_info.floor,
-        shiep_building_info.building_name
+        shiep_classroom_info.master_username,
+        shiep_classroom_info.manager_username,
+        shiep_classroom_info.created_time,
+        shiep_classroom_info.modified_time,
+        shiep_building_info.building_name,
+        shiep_classroom_type_info.type_code,
+        shiep_classroom_type_info.type_name,
+        (
+        SELECT shiep_classroom_booking.order_start_date
+        FROM shiep_classroom_booking
+        WHERE
+        shiep_classroom_booking.is_deleted IN ('n','N')
+        AND
+        shiep_classroom_info.classroom_code = shiep_classroom_booking.classroom_code
+        ORDER BY shiep_classroom_booking.modified_time desc LIMIT 1
+        ) AS order_start_date,
+        (
+        SELECT shiep_classroom_booking.order_end_date
+        FROM shiep_classroom_booking
+        WHERE
+        shiep_classroom_booking.is_deleted IN ('n','N')
+        AND
+        shiep_classroom_info.classroom_code = shiep_classroom_booking.classroom_code
+        ORDER BY shiep_classroom_booking.modified_time desc LIMIT 1
+        ) AS order_end_date
         FROM
         shiep_classroom_info LEFT JOIN shiep_building_info ON shiep_classroom_info.building_code = shiep_building_info.building_code
+        LEFT JOIN shiep_classroom_type_info ON shiep_classroom_info.type = shiep_classroom_type_info.type_code
         WHERE
         shiep_classroom_info.is_deleted IN ('n','N')
         AND
@@ -70,6 +127,9 @@
         <if test=" isProjector != '' and isProjector != null ">
             AND  shiep_classroom_info.is_computer = #{isProjector}
         </if>
+        <if test=" roomTypeCode != '' and roomTypeCode != null ">
+            AND  shiep_classroom_info.type = #{roomTypeCode}
+        </if>
         <if test=" classroomName != '' and classroomName != null ">
             <bind name="classroomName" value="'%' + classroomName + '%'" />
             AND  shiep_classroom_info.classroom_name LIKE #{classroomName}
@@ -85,6 +145,37 @@
         second_name
         FROM shiep_building_info
         where
+        is_deleted IN ('n','N')
+    </select>
+
+    <select id="getBookingInfoList" resultMap="BookingInfoBaseResultMap">
+        SELECT
+        shiep_classroom_booking.id,
+        shiep_classroom_booking.classroom_code,
+        shiep_classroom_booking.order_start_date,
+        shiep_classroom_booking.order_end_date,
+        shiep_classroom_info.manager_username,
+        shiep_classroom_booking.book_username,
+        shiep_classroom_info.is_clear,
+        shiep_classroom_booking.book_no,
+        shiep_classroom_booking_log.status
+        FROM shiep_classroom_booking LEFT JOIN  shiep_classroom_info ON shiep_classroom_booking.classroom_code = shiep_classroom_info.classroom_code
+        LEFT JOIN shiep_classroom_booking_log ON shiep_classroom_booking.book_no = shiep_classroom_booking_log.book_no
+        WHERE
+        shiep_classroom_booking.is_deleted IN ('n','N')
+        AND (DATE_FORMAT(shiep_classroom_booking.order_start_date,'%Y-%m-%d %H:%i:%S') &gt;= DATE_FORMAT(#{startDate},'%Y-%m-%d %H:%i:%S'))
+        AND (DATE_FORMAT(shiep_classroom_booking.order_start_date,'%Y-%m-%d %H:%i:%S') &lt;= DATE_FORMAT(#{endDate},'%Y-%m-%d %H:%i:%S'))
+        AND
+        shiep_classroom_booking.classroom_code = #{classroomCode}
+    </select>
+
+    <select id="getAllBuildingType" resultMap="ClassroomTypeBaseResultMap">
+        SELECT
+        id,
+        type_name,
+        type_code
+        FROM shiep_classroom_type_info
+        WHERE
         is_deleted IN ('n','N')
     </select>
 

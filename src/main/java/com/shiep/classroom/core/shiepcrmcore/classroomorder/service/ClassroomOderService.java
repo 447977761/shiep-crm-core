@@ -1,9 +1,12 @@
 package com.shiep.classroom.core.shiepcrmcore.classroomorder.service;
 
 import com.github.pagehelper.Page;
+import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomBookingDTO;
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO;
 import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo;
+import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepClassroomTypeInfoVo;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -25,5 +28,17 @@ public interface ClassroomOderService {
      * @return
      */
     List<ShiepBuildingInfoVo> getAllBuildingList();
+
+    /**
+     * 获取所有预约信息
+     * @return
+     */
+    List<ShiepClassroomBookingDTO> getBookingInfoList(ShiepClassroomBookingDTO shiepClassroomBookingDTO) throws ParseException;
+
+    /**
+     * 获取所有教室类型
+     * @return
+     */
+    List<ShiepClassroomTypeInfoVo> getAllBuildingType();
 
 }

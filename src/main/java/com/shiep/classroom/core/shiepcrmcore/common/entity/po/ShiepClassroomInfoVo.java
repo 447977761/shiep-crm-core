@@ -1,5 +1,6 @@
 package com.shiep.classroom.core.shiepcrmcore.common.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shiep.classroom.core.shiepcrmcore.common.entity.PageInfoDTO;
 
 import javax.persistence.*;
@@ -10,12 +11,11 @@ import java.util.Objects;
  * @program: shiep-crm-core
  * @description:
  * @author: liziyue
- * @create: 2019-01-10 19:28
+ * @create: 2019-01-26 17:54
  **/
 @Entity
 @Table(name = "shiep_classroom_info", schema = "shiep_crm_00")
 public class ShiepClassroomInfoVo extends PageInfoDTO {
-
     private long id;
     private String classroomCode;
     private String classroomName;
@@ -30,12 +30,17 @@ public class ShiepClassroomInfoVo extends PageInfoDTO {
     private String isClear;
     private String modifior;
     private String creator;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp createdTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp modifiedTime;
     private String isDeleted;
     private String isProhibited;
     private String buildingCode;
     private String floor;
+    private String type;
+    private String masterUsername;
+    private String managerUsername;
 
     @Id
     @Column(name = "id")
@@ -237,6 +242,36 @@ public class ShiepClassroomInfoVo extends PageInfoDTO {
         this.floor = floor;
     }
 
+    @Basic
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Basic
+    @Column(name = "master_username")
+    public String getMasterUsername() {
+        return masterUsername;
+    }
+
+    public void setMasterUsername(String masterUsername) {
+        this.masterUsername = masterUsername;
+    }
+
+    @Basic
+    @Column(name = "manager_username")
+    public String getManagerUsername() {
+        return managerUsername;
+    }
+
+    public void setManagerUsername(String managerUsername) {
+        this.managerUsername = managerUsername;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {return true;}
@@ -261,11 +296,15 @@ public class ShiepClassroomInfoVo extends PageInfoDTO {
                 Objects.equals(isDeleted, that.isDeleted) &&
                 Objects.equals(isProhibited, that.isProhibited) &&
                 Objects.equals(buildingCode, that.buildingCode) &&
-                Objects.equals(floor, that.floor);
+                Objects.equals(floor, that.floor) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(masterUsername, that.masterUsername) &&
+                Objects.equals(managerUsername, that.managerUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomCode, classroomName, chairs, desks, actualChairs, actualDesks, projectorCount, isProjector, isComputer, computerCount, isClear, modifior, creator, createdTime, modifiedTime, isDeleted, isProhibited, buildingCode, floor);
+
+        return Objects.hash(id, classroomCode, classroomName, chairs, desks, actualChairs, actualDesks, projectorCount, isProjector, isComputer, computerCount, isClear, modifior, creator, createdTime, modifiedTime, isDeleted, isProhibited, buildingCode, floor, type, masterUsername, managerUsername);
     }
 }

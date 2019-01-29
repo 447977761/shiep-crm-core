@@ -1,11 +1,14 @@
 package com.shiep.classroom.core.shiepcrmcore.classroomorder.dao;
 
+import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomBookingDTO;
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO;
 import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo;
+import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepClassroomTypeInfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,4 +33,15 @@ public interface ClassroomOderDao {
      */
     List<ShiepBuildingInfoVo> getAllBuildingList();
 
+    /**
+     * 获取预约信息
+     * @return
+     */
+    List<ShiepClassroomBookingDTO> getBookingInfoList(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("classroomCode") String classroomCode);
+
+    /**
+     * 获取所有教室类型
+     * @return
+     */
+    List<ShiepClassroomTypeInfoVo> getAllBuildingType();
 }

@@ -2,11 +2,13 @@ package com.shiep.classroom.core.shiepcrmcore.classroomorder.controller;
 
 
 import com.github.pagehelper.Page;
+import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomBookingDTO;
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.dto.ShiepClassroomInfoDTO;
 import com.shiep.classroom.core.shiepcrmcore.classroomorder.service.ClassroomOderService;
 import com.shiep.classroom.core.shiepcrmcore.common.ResponseEntity;
 import com.shiep.classroom.core.shiepcrmcore.common.ShmCodeEnum;
 import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepBuildingInfoVo;
+import com.shiep.classroom.core.shiepcrmcore.common.entity.po.ShiepClassroomTypeInfoVo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +38,7 @@ public class ClassroomOderController {
     public ResponseEntity getAllClassroomList(@RequestBody ShiepClassroomInfoDTO shiepClassroomInfoDTO) {
         ResponseEntity re = new ResponseEntity();
         try{
-            Page page =  classroomOderService.getAllClassroomList(shiepClassroomInfoDTO);
+            Page page = classroomOderService.getAllClassroomList(shiepClassroomInfoDTO);
             long total = page.getTotal();
             Map<String, Object> result = new HashMap<>(2);
             result.put("total", total);
@@ -58,7 +60,7 @@ public class ClassroomOderController {
     public ResponseEntity getAllBuildingList() {
         ResponseEntity re = new ResponseEntity();
         try{
-            List<ShiepBuildingInfoVo> shiepBuildingInfoVos =  classroomOderService.getAllBuildingList();
+            List<ShiepBuildingInfoVo> shiepBuildingInfoVos = classroomOderService.getAllBuildingList();
             re.setResult(shiepBuildingInfoVos);
             re.setSuccess(true);
             re.setCode(ShmCodeEnum.REQUEST_SUCCESS_200.getCode());
@@ -71,5 +73,42 @@ public class ClassroomOderController {
         }
         return re;
     }
+
+    @RequestMapping("/getBookingInfoList")
+    public ResponseEntity getBookingInfoList(@RequestBody ShiepClassroomBookingDTO shiepClassroomBookingDTO) {
+        ResponseEntity re = new ResponseEntity();
+        try{
+            List<ShiepClassroomBookingDTO> shiepClassroomBookingDTOS = classroomOderService.getBookingInfoList(shiepClassroomBookingDTO);
+            re.setResult(shiepClassroomBookingDTOS);
+            re.setSuccess(true);
+            re.setCode(ShmCodeEnum.REQUEST_SUCCESS_200.getCode());
+            re.setMessage(ShmCodeEnum.REQUEST_SUCCESS_200.getDesc());
+        }catch (Exception e){
+            re.setSuccess(false);
+            re.setCode(ShmCodeEnum.REQUEST_FAIL_900.getCode());
+            re.setMessage(ShmCodeEnum.REQUEST_FAIL_900.getDesc());
+            log.error("内部错误:{}",e);
+        }
+        return re;
+    }
+
+    @RequestMapping("/allBuildingType")
+    public ResponseEntity getAllBuildingType() {
+        ResponseEntity re = new ResponseEntity();
+        try{
+            List<ShiepClassroomTypeInfoVo> shiepClassroomTypeInfoVos = classroomOderService.getAllBuildingType();
+            re.setResult(shiepClassroomTypeInfoVos);
+            re.setSuccess(true);
+            re.setCode(ShmCodeEnum.REQUEST_SUCCESS_200.getCode());
+            re.setMessage(ShmCodeEnum.REQUEST_SUCCESS_200.getDesc());
+        }catch (Exception e){
+            re.setSuccess(false);
+            re.setCode(ShmCodeEnum.REQUEST_FAIL_900.getCode());
+            re.setMessage(ShmCodeEnum.REQUEST_FAIL_900.getDesc());
+            log.error("内部错误:{}",e);
+        }
+        return re;
+    }
+
 
 }
